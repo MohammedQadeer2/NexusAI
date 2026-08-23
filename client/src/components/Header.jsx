@@ -9,7 +9,7 @@ export default function Header({ onMenuClick }) {
           <Menu className="h-5 w-5" />
         </button>
         <button className="rounded-lg px-2 py-1.5 transition hover:bg-[#1e293b] sm:px-3">
-          <h1 className="text-lg font-bold tracking-tight text-slate-100 sm:text-xl">Qadeer<span className="text-indigo-300">.AI</span></h1>
+          <h1 className="text-lg font-bold tracking-tight text-slate-100 sm:text-xl">NexusAI</h1>
         </button>
       </div>
       <button className="p-2 hover:bg-[#1e293b] rounded-lg transition" title="Share">

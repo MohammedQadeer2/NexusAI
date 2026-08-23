@@ -1,5 +1,5 @@
 import React from "react";
-import { LoaderCircle, Plus, Mic, ArrowUp } from "lucide-react";
+import { LoaderCircle, Mic, ArrowUp } from "lucide-react";
 
 export default function ChatInput({ input, setInput, onSend, isLoading, disabled = false }) {
   const handleKeyDown = (e) => {
@@ -14,10 +14,6 @@ export default function ChatInput({ input, setInput, onSend, isLoading, disabled
       <div className="max-w-2xl mx-auto">
         <div className="bg-[#1e293b] rounded-full flex items-center px-3 py-2 border border-slate-700/50 focus-within:border-slate-500 transition">
           
-          <button type="button" disabled={isLoading || disabled} className="p-2 text-slate-400 hover:text-white rounded-full transition disabled:opacity-50">
-            <Plus className="w-5 h-5" />
-          </button>
-
           <textarea
             rows="1"
             value={input}

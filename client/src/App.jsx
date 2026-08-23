@@ -189,12 +189,12 @@ export default function App({ onProfileClick, onLogout }) {
           {!isHistoryLoading && !selectedConversationId && (
             <section className="mx-auto flex w-full max-w-xl flex-1 flex-col justify-center py-10 sm:py-16">
               <div className="mb-7 grid h-14 w-14 place-items-center rounded-2xl bg-indigo-500/15 text-indigo-300 ring-1 ring-inset ring-indigo-400/20"><Sparkles className="h-7 w-7" /></div>
-              <p className="text-sm font-medium text-indigo-300">Welcome to Qadeer.AI</p>
+              <p className="text-sm font-medium text-indigo-300">Welcome to NexusAI</p>
               <h2 className="mt-2 text-3xl font-semibold tracking-tight text-slate-100 sm:text-4xl">Get started in a few simple steps.</h2>
-              <p className="mt-3 max-w-lg text-sm leading-6 text-slate-400">Qadeer.AI is ready to help you explore ideas, answer questions, and work through tasks.</p>
+              <p className="mt-3 max-w-lg text-sm leading-6 text-slate-400">NexusAI is ready to help you explore ideas, answer questions, and work through tasks.</p>
               <ol className="mt-8 space-y-3">
-                {[["1", "Choose a workspace", "Select General Chat or Company Knowledge from the sidebar."], ["2", "Start a new chat", "Click New chat to begin a fresh conversation."], ["3", "Ask Qadeer.AI anything", "Type your question below and send it when you are ready."]].map(([number, title, description]) => (
-                  <li key={number} className="flex gap-4 rounded-2xl border border-slate-800 bg-[#111b30]/60 p-4"><span className="grid h-7 w-7 shrink-0 place-items-center rounded-full bg-indigo-500/15 text-xs font-semibold text-indigo-200">{number}</span><span><strong className="block text-sm font-medium text-slate-200">{title}</strong><span className="mt-1 block text-sm leading-5 text-slate-400">{description}</span></span></li>
+                {[["1", "Choose a workspace", "Select General Chat or Company Knowledge from the sidebar."], ["2", "Start a new chat", "Click New chat to begin a fresh conversation."], ["3", "Ask NexusAI anything", "Type your question below and send it when you are ready."]].map(([number, title, description]) => (
+                <li key={number} className="flex gap-4 rounded-2xl border border-slate-800 bg-[#111b30]/60 p-4"><span className="grid h-7 w-7 shrink-0 place-items-center rounded-full bg-indigo-500/15 text-xs font-semibold text-indigo-200">{number}</span><span><strong className="block text-sm font-medium text-slate-200">{title}</strong><span className="mt-1 block text-sm leading-5 text-slate-400">{description}</span></span></li>
                 ))}
               </ol>
               <p className="mt-6 flex items-center gap-2 text-sm text-slate-500"><MessageSquarePlus className="h-4 w-4" /> Select a recent chat to continue where you left off <ArrowRight className="h-4 w-4" /></p>

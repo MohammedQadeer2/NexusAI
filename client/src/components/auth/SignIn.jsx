@@ -28,7 +28,7 @@ export default function SignIn({ onSwitch, onSuccess }) {
   return (
     <div className="mx-auto w-full max-w-md">
       <p className="text-sm font-medium text-indigo-300">Welcome back</p>
-      <h2 className="mt-2 text-3xl font-semibold tracking-tight">Sign in to Qadeer.AI</h2>
+      <h2 className="mt-2 text-3xl font-semibold tracking-tight">Sign in to NexusAI</h2>
       <p className="mt-3 text-sm leading-6 text-slate-400">Continue your conversations and access your workspace.</p>
       <button type="button" className="mt-8 flex w-full items-center justify-center gap-3 rounded-xl border border-slate-700 bg-slate-800/60 px-4 py-3 text-sm font-medium transition hover:bg-slate-800">
         <GoogleIcon />
@@ -61,7 +61,7 @@ export default function SignIn({ onSwitch, onSuccess }) {
         <button disabled={isLoading} className="w-full rounded-xl bg-indigo-500 px-4 py-3 text-sm font-semibold text-white transition hover:bg-indigo-400 disabled:opacity-60">{isLoading ? "Signing in..." : "Sign in"}</button>
       </form>
       <p className="mt-7 text-center text-sm text-slate-400">
-        New to Qadeer.AI? <button type="button" onClick={onSwitch} className="font-medium text-indigo-300">Create an account</button>
+        New to NexusAI? <button type="button" onClick={onSwitch} className="font-medium text-indigo-300">Create an account</button>
       </p>
     </div>
   );

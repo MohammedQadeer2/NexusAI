@@ -4,7 +4,7 @@ export default function AuthLayout({ children }) {
       <div className="mx-auto grid min-h-[calc(100vh-40px)] max-w-6xl overflow-hidden rounded-3xl border border-slate-700/60 bg-[#111b30] shadow-2xl shadow-black/30 lg:grid-cols-2">
         <section className="relative hidden overflow-hidden bg-gradient-to-br from-indigo-600 via-indigo-700 to-[#172554] p-12 lg:flex lg:flex-col">
           <h1 className="relative z-10 text-2xl font-bold">
-            Qadeer<span className="text-indigo-200">.AI</span>
+            NexusAI
           </h1>
           <div className="relative z-10 my-auto max-w-md">
             <p className="text-sm font-medium uppercase tracking-[0.2em] text-indigo-200">
@@ -21,7 +21,7 @@ export default function AuthLayout({ children }) {
         </section>
         <section className="flex flex-col justify-center px-5 py-10 sm:px-12 lg:px-16">
           <h1 className="mb-10 text-xl font-bold lg:hidden">
-            Qadeer<span className="text-indigo-300">.AI</span>
+            NexusAI
           </h1>
           {children}
         </section>
