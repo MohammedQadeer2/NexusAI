@@ -115,6 +115,8 @@ export default function App({ onProfileClick, onLogout }) {
         }
       );
 
+      console.log(`Messages state in APP.jsx: ${JSON.stringify(messages, null, 2)}`)
+
     } catch (error) {
       console.error("Error occurred while fetching API:", error);
       setMessages((previousMessages) => {

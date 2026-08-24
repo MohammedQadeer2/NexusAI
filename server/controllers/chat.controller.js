@@ -42,8 +42,10 @@ export const createChat = async (req, res) => {
         let streamGenerator;
 
         if (conversation.workspace === 'company') {
+            console.log(`I am before the companyChatStream `)
             const targetDocId = conversation.documentId ? conversation.documentId.toString() : null;
             streamGenerator = companyChatStream(conversationId, message, targetDocId);
+            console.log(`I am after the companyChatStream `)
         } else {
             streamGenerator = GenerateStream(conversationId);
         }

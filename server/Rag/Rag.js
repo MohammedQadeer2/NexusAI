@@ -22,6 +22,7 @@ export async function* companyChatStream(conversationId, userQuery, targetDocId)
     const context = relatedChunks.length > 0
         ? relatedChunks.map((chunk) => chunk.pageContent).join("\n\n")
         : "No relevant company context was found for this document.";
+    console.log(`context of Vector seaerch Result inside Rag.js: ${context}`);
 
     const messages = [
         {
@@ -51,6 +52,7 @@ export async function* companyChatStream(conversationId, userQuery, targetDocId)
 
     for await (const chunk of stream) {
         const content = chunk.choices[0]?.delta?.content || "";
+        // console.log(`content of AI from RAG.js : ${content}`);
         if (content) {
             yield content;
         }
