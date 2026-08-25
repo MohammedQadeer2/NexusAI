@@ -16,6 +16,8 @@ export async function* companyChatStream(conversationId, userQuery, targetDocId)
     // Pass the filter object as the third argument for doc isolation
     const filter = targetDocId ? { doc_id: targetDocId } : undefined;
 
+    console.log(`targetDocId inside Rag.js: ${targetDocId}`);
+
     // Perform the similarity search using the filter
     const relatedChunks = await vectorStore.similaritySearch(userQuery, 3, filter);
 
