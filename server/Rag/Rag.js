@@ -16,15 +16,13 @@ export async function* companyChatStream(conversationId, userQuery, targetDocId)
     // Pass the filter object as the third argument for doc isolation
     const filter = targetDocId ? { doc_id: targetDocId } : undefined;
 
-    console.log(`targetDocId inside Rag.js: ${targetDocId}`);
-
     // Perform the similarity search using the filter
     const relatedChunks = await vectorStore.similaritySearch(userQuery, 3, filter);
 
     const context = relatedChunks.length > 0
         ? relatedChunks.map((chunk) => chunk.pageContent).join("\n\n")
         : "No relevant company context was found for this document.";
-    console.log(`context of Vector seaerch Result inside Rag.js: ${context}`);
+    console.log(`Retrieved ${relatedChunks.length} context chunks for the query.`);
 
     const messages = [
         {
