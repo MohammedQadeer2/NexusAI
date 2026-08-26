@@ -1,16 +1,21 @@
+// The shared workspace list supplies names and icons for each selectable workspace.
 import { workspaces } from "./workspaceData";
 
 export default function WorkspaceSelector({ workspace, onWorkspaceChange, showDetails, onClose }) {
+  // Render one button for every workspace while preserving the active selection style.
   return (
     <div className="space-y-1">
       {workspaces.map((item) => {
+        // Resolve the configured icon component so each workspace can render its own symbol.
         const WorkspaceIcon = item.icon;
+        // Compare stable workspace names to determine which button is active.
         const isSelected = workspace.name === item.name;
 
         return (
           <button
             key={item.name}
             onClick={() => {
+              // Notify the parent and close the mobile drawer after a workspace is chosen.
               onWorkspaceChange(item);
               onClose();
             }}

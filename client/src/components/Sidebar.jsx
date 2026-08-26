@@ -1,12 +1,18 @@
+// React hooks manage sidebar state and synchronize it with backend data.
 import { useEffect, useState } from "react";
+// Icons provide compact controls for collapsing, expanding, creating, and closing the sidebar.
 import { ChevronLeft, ChevronRight, Plus, X } from "lucide-react";
+// The profile API loads the signed-in user's display information.
 import { getProfile } from "../api/authApi";
+// Conversation APIs load, create, and delete chats for the selected workspace.
 import {
   createConversation,
   deleteConversation,
   getConversations,
 } from "../api/conversationApi";
+// The document API uploads PDFs and starts their knowledge-base indexing.
 import { uploadDocument } from "../api/documentApi";
+// These child components keep workspace, document, upload, chat, and profile UI focused.
 import WorkspaceSelector from "./sidebar/WorkspaceSelector";
 import { workspaces } from "./sidebar/workspaceData";
 import DocumentSelector from "./sidebar/DocumentSelector";
@@ -15,16 +21,20 @@ import RecentChats from "./sidebar/RecentChats";
 import ProfileMenu from "./sidebar/ProfileMenu";
 
 export default function Sidebar({ userId, selectedConversationId, onConversationSelect, onConversationDelete, onProfileClick, onLogout, mobileOpen, onClose }) {
+  // Collapse state controls the compact desktop sidebar while mobileOpen controls mobile visibility.
   const [isCollapsed, setIsCollapsed] = useState(false);
+  // The first configured workspace is selected when the sidebar initially renders.
   const [workspace, setWorkspace] = useState(workspaces[0]);
+  // Conversations are refreshed whenever the signed-in user or workspace changes.
   const [conversations, setConversations] = useState([]);
+  // Separate loading flags keep chat creation and chat loading feedback independent.
   const [isLoading, setIsLoading] = useState(false);
   const [isCreating, setIsCreating] = useState(false);
-  //for document upload status
+  // Upload state controls the progress message and prevents duplicate file submissions.
   const [isUploading, setIsUploading] = useState(false);
   const [uploadMessage, setUploadMessage] = useState("");
   const [uploadError, setUploadError] = useState("");
-  //Add state to hold the list of all uploaded documents and track which one is currently selected by the user.
+  // These values store available company documents and the document used for new chats.
   const [allDocuments, setAllDocuments] = useState([]);
   const [selectedDocumentId, setSelectedDocumentId] = useState("");
 
@@ -36,11 +46,14 @@ export default function Sidebar({ userId, selectedConversationId, onConversation
   const [showProfileMenu, setShowProfileMenu] = useState(false);
   const [openMenuId, setOpenMenuId] = useState("");
   const [deletingConversationId, setDeletingConversationId] = useState("");
+  // Details remain visible on mobile and disappear only when the desktop sidebar is collapsed.
   const showDetails = !isCollapsed || mobileOpen;
 
   useEffect(() => {
+    // Do not request conversations until a user has been identified.
     if (!userId) return;
 
+    // Load conversations for the active workspace and expose failures in the sidebar.
     async function loadConversations() {
       setIsLoading(true);
       setError("");
@@ -60,6 +73,7 @@ export default function Sidebar({ userId, selectedConversationId, onConversation
   }, [userId, workspace.value]);
 
   useEffect(() => {
+    // Profile data is user-specific, so skip the request when no user is available.
     if (!userId) return;
     getProfile(userId)
       .then(setUser)
@@ -67,13 +81,14 @@ export default function Sidebar({ userId, selectedConversationId, onConversation
   }, [userId]);
 
   async function createNewChat() {
+    // A chat cannot be created without a signed-in user.
     if (!userId) return;
 
     setIsCreating(true);
     setError("");
 
     try {
-      // CRITICAL: Pass the selected document ID as the 3rd argument
+      // Company chats use the selected document; other workspaces do not need a document filter.
       const docIdToPass = workspace.value === "company" ? selectedDocumentId : null;
       console.log(`Document Id inside createNeewChat function: ${docIdToPass}`)
 
@@ -90,6 +105,7 @@ export default function Sidebar({ userId, selectedConversationId, onConversation
   }
 
   async function handleDeleteConversation(conversationId) {
+    // Ask for confirmation because deleting a conversation cannot be undone from this view.
     const shouldDelete = window.confirm("Delete this conversation?");
     console.log(`conversationId inside sidebar.jsx: ${conversationId}`)
 
@@ -101,7 +117,7 @@ export default function Sidebar({ userId, selectedConversationId, onConversation
     try {
       await deleteConversation(conversationId, userId);
 
-      // Remove the deleted chat from the current sidebar list.
+      // Remove the deleted chat immediately so the visible list matches the server result.
       setConversations((previousConversations) =>
         previousConversations.filter((conversation) => conversation._id !== conversationId)
       );
@@ -120,7 +136,7 @@ export default function Sidebar({ userId, selectedConversationId, onConversation
 
 
 
-  //Load available documents on workspace change :
+  // Reload company documents when entering that workspace or after a successful upload.
   useEffect(() => {
     if (workspace.value === "company") {
       import("../api/documentApi").then(({ getDocuments }) => {
@@ -128,7 +144,8 @@ export default function Sidebar({ userId, selectedConversationId, onConversation
           .then((data) => {
             setAllDocuments(data);
             if (data.length > 0) {
-              setSelectedDocumentId(data[0]._id); // Default to the first document in list
+              // Selecting the first document gives new company chats a valid default target.
+              setSelectedDocumentId(data[0]._id);
             }
           })
           .catch(console.error);
@@ -136,7 +153,7 @@ export default function Sidebar({ userId, selectedConversationId, onConversation
     }
   }, [workspace.value, uploadMessage]); // Re-fetch documents whenever a new upload succeeds!
 
-  // use to handle the pdf files
+  // Upload a PDF, show its result, and reset the input so the same file can be selected again.
   async function handleFileUpload(event) {
     const file = event.target.files[0];
     if (!file) return;
@@ -148,14 +165,14 @@ export default function Sidebar({ userId, selectedConversationId, onConversation
     try {
       const response = await uploadDocument(file);
       setUploadMessage(response.message);
-      // Clear success message after 5 seconds
+      // Clear the success message after five seconds to keep the panel uncluttered.
       setTimeout(() => setUploadMessage(""), 5000);
     } catch (err) {
       setUploadError(err.message);
       setUploadMessage("");
     } finally {
       setIsUploading(false);
-      // Reset the file input element so user can upload same/new files again
+      // Reset the input so selecting the same file triggers the change event again.
       event.target.value = "";
     }
   }
@@ -190,7 +207,7 @@ export default function Sidebar({ userId, selectedConversationId, onConversation
         onClose={onClose}
       />
 
-      {/* Document Selector Dropdown - only visible for Company Knowledge Workspace */}
+      {/* Only company workspace chats can be narrowed to a specific uploaded document. */}
       {workspace.value === "company" && showDetails && (
         <DocumentSelector
           documents={allDocuments}
@@ -209,7 +226,7 @@ export default function Sidebar({ userId, selectedConversationId, onConversation
         {showDetails && (isCreating ? "Creating..." : "New chat")}
       </button>
 
-      {/* Hide the upload panel while recent chats are open to give chat history more space. */}
+      {/* Hide uploads while chat history is expanded so the history gets the available space. */}
       {workspace.value === "company" && showDetails && !showRecentChats && (
         <UploadPanel
           isUploading={isUploading}
