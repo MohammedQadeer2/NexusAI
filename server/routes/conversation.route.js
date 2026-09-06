@@ -5,8 +5,11 @@ import {
     getConversations,
     getMessages
 } from "../controllers/conversation.controller.js";
+import { requireAuth } from "../middleware/auth.middleware.js";
 
 const conversationRouter = express.Router();
+
+conversationRouter.use(requireAuth);
 
 conversationRouter.post("/", createConversation);
 conversationRouter.get("/", getConversations);

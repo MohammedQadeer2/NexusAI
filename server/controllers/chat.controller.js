@@ -4,10 +4,11 @@ import Message from "../models/message.model.js";
 import { companyChatStream } from "../Rag/Rag.js";
 
 export const createChat = async (req, res) => {
-    const { message, userId, conversationId } = req.body;
+    const { message, conversationId } = req.body;
+    const userId = req.user.id;
 
-    if (!message || !userId || !conversationId) {
-        return res.status(400).json({ message: "message, userId and conversationId are required" });
+    if (!message || !conversationId) {
+        return res.status(400).json({ message: "message and conversationId are required" });
     }
 
     try {

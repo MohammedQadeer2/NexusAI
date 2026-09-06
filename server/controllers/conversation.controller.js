@@ -7,11 +7,8 @@ const workspaces = ["general", "company"];
 
 export const createConversation = async (req, res) => {
     try {
-        const { userId, title, workspace = "general", documentId } = req.body; // <-- Extract documentId here
-
-        if (!userId) {
-            return res.status(400).json({ message: "userId is required" });
-        }
+        const { title, workspace = "general", documentId } = req.body;
+        const userId = req.user.id;
 
         if (!workspaces.includes(workspace)) {
             return res.status(400).json({ message: "workspace must be general or company" });
@@ -35,11 +32,8 @@ export const createConversation = async (req, res) => {
 
 export const getConversations = async (req, res) => {
     try {
-        const { userId, workspace } = req.query;
-
-        if (!userId) {
-            return res.status(400).json({ message: "userId is required" });
-        }
+        const { workspace } = req.query;
+        const userId = req.user.id;
 
         if (!workspaces.includes(workspace)) {
             return res.status(400).json({ message: "workspace must be general or company" });
@@ -57,7 +51,7 @@ export const getConversations = async (req, res) => {
 export const getMessages = async (req, res) => {
     try {
         const { conversationId } = req.params;
-        const { userId } = req.query;
+        const userId = req.user.id;
 
         const conversation = await Conversation.findOne({
             _id: conversationId,
@@ -80,11 +74,7 @@ export const getMessages = async (req, res) => {
 export const deleteConversation = async (req, res) => {
     try {
         const { conversationId } = req.params;
-        const { userId } = req.body;
-
-        if (!userId) {
-            return res.status(400).json({ message: "userId is required" });
-        }
+        const userId = req.user.id;
 
         // Delete only a conversation that belongs to this user.
         const conversation = await Conversation.findOneAndDelete({

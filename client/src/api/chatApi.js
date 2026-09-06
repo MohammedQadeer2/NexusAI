@@ -11,6 +11,7 @@ import { API_BASE_URL } from "./apiClient";
 export async function sendMessageStream(message, userId, conversationId, onChunk) {
   const response = await fetch(`${API_BASE_URL}/chat`, {
     method: "POST",
+    credentials: "include",
     headers: {
       "Content-Type": "application/json",
     },

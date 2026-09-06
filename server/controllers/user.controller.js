@@ -27,8 +27,8 @@ export const signUp = async (req, res) => {
         res.cookie("token", token, {
             httpOnly: true,
             maxAge: 7 * 60 * 60 * 24 * 1000,
-            samesite: "none",
-            secure: true,
+            sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+            secure: process.env.NODE_ENV === "production",
         });
         res.status(201).json(newUser);
     }catch(err) {
@@ -54,8 +54,8 @@ export const signIn = async(req, res) => {
     res.cookie("token", token, {
         httpOnly: true,
         maxAge: 7 * 60 * 60 * 24 * 1000,
-        samesite: 'none',
-        secure: true
+        sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+        secure: process.env.NODE_ENV === "production"
     });
     return res.status(201).json(user);
 }
@@ -64,8 +64,8 @@ export const signOut = async (req, res) => {
   try {
     res.clearCookie("token", {
       httpOnly: true,
-      secure: true, // true in production (https)
-      sameSite: "lax",
+      secure: process.env.NODE_ENV === "production",
+      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
     });
 
     return res.status(200).json({ message: "Logged out successfully" });
@@ -77,7 +77,7 @@ export const signOut = async (req, res) => {
 
 export const getProfile = async (req, res) => {
     try {
-        const user = await User.findById(req.params.userId).select("-password");
+        const user = await User.findById(req.user.id).select("-password");
 
         if (!user) {
             return res.status(404).json({ message: "User not found" });

@@ -6,6 +6,7 @@ export async function uploadDocument(file) {
 
   const response = await fetch(`${API_BASE_URL}/api/documents/upload`, {
     method: "POST",
+    credentials: "include",
     body: formData,
     // Note: Do NOT pass options.headers with Content-Type. 
     // This allows the browser to correctly set: multipart/form-data; boundary=----WebKitFormBoundary...
@@ -22,7 +23,9 @@ export async function uploadDocument(file) {
 
 // to get the all ingestedDocument from Pinecone
 export async function getDocuments() {
-  const response = await fetch(`${API_BASE_URL}/api/documents`);
+  const response = await fetch(`${API_BASE_URL}/api/documents`, {
+    credentials: "include",
+  });
   const data = await response.json();
   if (!response.ok) {
     throw new Error(data.message || "Failed to load documents list");
