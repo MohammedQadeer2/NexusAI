@@ -180,7 +180,7 @@ export default function Sidebar({ userId, selectedConversationId, onConversation
 
   return (
     <aside
-      className={`w-72 ${isCollapsed ? "md:w-20" : "md:w-72"} ${mobileOpen ? "fixed inset-y-0 left-0 z-50 flex shadow-2xl shadow-black/50" : "hidden"} h-screen min-h-0 shrink-0 flex-col overflow-hidden border-r border-slate-800 bg-[#0d1526] p-3 transition-all duration-200 md:static md:z-auto md:flex md:shadow-none`}
+      className={`w-72 ${isCollapsed ? "md:w-20" : "md:w-72"} ${mobileOpen ? "fixed inset-y-0 left-0 z-50 flex shadow-2xl shadow-black/50" : "hidden"} h-full min-h-0 shrink-0 flex-col overflow-hidden border-r border-slate-800 bg-[#0d1526] p-3 transition-all duration-200 md:static md:z-auto md:flex md:shadow-none`}
     >
       <div className="mb-5 flex items-center justify-between px-1">
         {showDetails && (

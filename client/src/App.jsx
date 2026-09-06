@@ -14,7 +14,6 @@ export default function App({ onProfileClick, onLogout }) {
   const [selectedConversationId, setSelectedConversationId] = useState(null);
   const [isHistoryLoading, setIsHistoryLoading] = useState(false);
   const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
-  const [viewportHeight, setViewportHeight] = useState("100dvh");
   const userId = localStorage.getItem("userId");
 
   const chatContainerRef = useRef(null);
@@ -22,33 +21,6 @@ export default function App({ onProfileClick, onLogout }) {
   // Generate a compact, collision-resistant id for local-only messages
   // (Date.now() alone can collide when two messages are created in the same ms).
   const generateId = () => `${Date.now()}-${Math.random().toString(36).slice(2,9)}`;
-
-  useEffect(() => {
-    if (typeof window === "undefined" || !window.visualViewport) return;
-
-    const handleResize = () => {
-      // Set the dynamic height to match the visible layout space
-      setViewportHeight(`${window.visualViewport.height}px`);
-      
-      // Force auto-scroll to the bottom of the active conversation
-      setTimeout(() => {
-        if (chatContainerRef.current) {
-          chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
-        }
-      }, 80);
-    };
-
-    window.visualViewport.addEventListener("resize", handleResize);
-    window.visualViewport.addEventListener("scroll", handleResize);
-    
-    // Call immediately to set original height correctly
-    handleResize();
-
-    return () => {
-      window.visualViewport.removeEventListener("resize", handleResize);
-      window.visualViewport.removeEventListener("scroll", handleResize);
-    };
-  }, []);
 
   useEffect(() => {
     if (chatContainerRef.current) {
@@ -166,10 +138,7 @@ export default function App({ onProfileClick, onLogout }) {
   };
 
   return (
-    <div 
-      style={{ height: viewportHeight }} 
-      className="flex w-full overflow-hidden bg-[#0f172a] font-sans text-slate-100"
-    >
+    <div className="flex h-dvh w-full overflow-hidden bg-[#0f172a] font-sans text-slate-100">
       {isMobileSidebarOpen && <button onClick={() => setIsMobileSidebarOpen(false)} className="fixed inset-0 z-40 bg-black/50 md:hidden" aria-label="Close sidebar" />}
       <Sidebar
         userId={userId}
@@ -184,12 +153,13 @@ export default function App({ onProfileClick, onLogout }) {
       <div className="flex min-w-0 flex-1 flex-col">
       <Header onMenuClick={() => setIsMobileSidebarOpen(true)} />
 
-      <main ref={chatContainerRef} className="flex-1 overflow-y-auto px-4 py-5 sm:px-6 sm:py-6">
+      {/* min-h-0 lets only this area scroll, so the input never covers the welcome steps. */}
+      <main ref={chatContainerRef} className="min-h-0 flex-1 overflow-y-auto px-4 py-5 sm:px-6 sm:py-6">
         <div className="max-w-2xl mx-auto flex flex-col gap-6">
           {isHistoryLoading && <p className="text-sm text-slate-400">Loading conversation...</p>}
 
           {!isHistoryLoading && !selectedConversationId && (
-            <section className="mx-auto flex w-full max-w-xl flex-1 flex-col justify-center py-10 sm:py-16">
+            <section className="mx-auto w-full max-w-xl py-5 sm:py-10">
               <div className="mb-7 grid h-14 w-14 place-items-center rounded-2xl bg-indigo-500/15 text-indigo-300 ring-1 ring-inset ring-indigo-400/20"><Sparkles className="h-7 w-7" /></div>
               <p className="text-sm font-medium text-indigo-300">Welcome to NexusAI</p>
               <h2 className="mt-2 text-3xl font-semibold tracking-tight text-slate-100 sm:text-4xl">Get started in a few simple steps.</h2>

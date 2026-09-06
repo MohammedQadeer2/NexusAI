@@ -9,8 +9,9 @@ export default function ChatInput({ input, setInput, onSend, isLoading, disabled
     }
   };
 
+  // This footer stays outside the scrollable message area, so it always has its own space.
   return (
-    <footer className="sticky bottom-0 bg-[#0f172a] p-3 sm:p-4 z-10 pb-[calc(0.75rem+env(safe-area-inset-bottom))]">
+    <footer className="shrink-0 bg-[#0f172a] p-3 sm:p-4 pb-[calc(0.75rem+env(safe-area-inset-bottom))]">
       <div className="max-w-2xl mx-auto">
         <div className="bg-[#1e293b] rounded-full flex items-center px-3 py-2 border border-slate-700/50 focus-within:border-slate-500 transition">
           

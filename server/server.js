@@ -9,8 +9,18 @@ import conversationRouter from './routes/conversation.route.js';
 import documentRouter from './routes/document.route.js';
 const app = express();
 
+const allowedOrigins = [
+    process.env.CLIENT_URL,
+    "http://localhost:5173",
+    "http://127.0.0.1:5173",
+];
+
 app.use(cors({
-    origin: process.env.CLIENT_URL || "http://localhost:5173",
+    // Allow the local frontend when it is opened from a phone on the same Wi-Fi.
+    origin: (origin, callback) => {
+        const isPrivateNetwork = /^http:\/\/(10\.|192\.168\.)\d+\.\d+\.\d+:5173$/.test(origin || "");
+        callback(null, !origin || allowedOrigins.includes(origin) || isPrivateNetwork);
+    },
     credentials: true,
 }));
 const PORT = 3001;
