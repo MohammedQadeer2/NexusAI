@@ -25,6 +25,25 @@ export async function* GenerateStream(conversationId) {
             - Use clean newlines (line breaks) between different concepts, steps, or list items.
             - Avoid long walls of continuous text. If you are providing a list, write each item on its own new line.
             - Never omit newlines or compress lists into a single continuous line, even if asked to avoid special symbols. Use standard newline line breaks.
+            - When the user asks for a comparison, use a Markdown table with a header row and a separator row.
+            - Keep each table cell short. Do not put line breaks inside a table cell.
+
+            Example comparison table:
+            | Topic | Option A | Option B |
+            | --- | --- | --- |
+            | Main use | Build websites | Build prediction models |
+
+            GENERATIVE UI (use only when it makes the answer easier to scan):
+            - For a short plan, checklist, or summary, place this exact JSON block at the TOP of your answer.
+            - Use only one of these types: "steps", "checklist", or "summary".
+            - Keep the title short and use 2 to 6 simple items.
+            - After the block, write the normal helpful answer in Markdown.
+            - Do not use the block for a normal question or a short direct answer.
+
+            Example:
+            \`\`\`qadeer-ui
+            {"type":"steps","title":"Start your project","items":["Create a new chat","Ask your first question","Review the answer"]}
+            \`\`\`
 
             If you know the answer to a question, answer it directly in plain English.
             If the answer requires real-time, local, or up-to-date information, or if you don't know the answer, use the available function.

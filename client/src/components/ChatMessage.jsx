@@ -1,11 +1,15 @@
 import React from "react";
 import { Copy, ThumbsUp, ThumbsDown, Share, RotateCw } from "lucide-react";
 import Markdown from 'react-markdown';
+import remarkGfm from "remark-gfm";
+import GenerativeUiCard from "./GenerativeUiCard";
+import { parseGenerativeUi } from "../utils/parseGenerativeUi";
 export default function ChatMessage({ message }) {
   const isUser = message.sender === "user";
   // Only show assistant action icons after the assistant has produced visible text.
   // This prevents the action bar appearing above an empty streaming placeholder.
   const hasContent = Boolean(message.text && message.text.toString().trim().length > 0);
+  const { ui, content } = parseGenerativeUi(message.text);
 
   if (isUser) {
     return (
@@ -19,8 +23,18 @@ export default function ChatMessage({ message }) {
 
   return (
     <div className="flex flex-col gap-3 text-[15px] leading-relaxed text-slate-200">
+      {ui && <GenerativeUiCard ui={ui} />}
       <div className="prose prose-invert max-w-none text-[15px] leading-relaxed text-slate-200">
-        <Markdown>{message.text}</Markdown>
+        {/* remarkGfm changes Markdown table text into real HTML table elements. */}
+        <Markdown
+          remarkPlugins={[remarkGfm]}
+          components={{
+            // This wrapper lets wide tables scroll sideways on small phone screens.
+            table: ({ children }) => <div className="chat-table-wrap"><table>{children}</table></div>,
+          }}
+        >
+          {content}
+        </Markdown>
       </div>
 
       {hasContent && (
