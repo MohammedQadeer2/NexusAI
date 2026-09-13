@@ -1,11 +1,13 @@
 // Change the API address in one place with VITE_API_BASE_URL.
-// Change the API address in one place with VITE_API_BASE_URL.
-export const API_BASE_URL =
-  import.meta.env.VITE_API_BASE_URL ||
-  (window.location.hostname === "localhost" ||
-    window.location.hostname === "127.0.0.1" ||
-    window.location.hostname === "10.89.238.159"
-    ? "http://10.89.238.159:3001"
+const browserHost = window.location.hostname;
+const isLocalhost = browserHost === "localhost" || browserHost === "127.0.0.1";
+const isPrivateNetwork = /^(10\.|192\.168\.|172\.(1[6-9]|2\d|3[0-1])\.)/.test(browserHost);
+
+// Use the same computer's backend during local development and Wi-Fi testing.
+// A deployed website continues to use the deployed backend below.
+export const API_BASE_URL = import.meta.env.VITE_API_BASE_URL ||
+  (isLocalhost || isPrivateNetwork
+    ? `http://${browserHost}:3001`
     : "https://agenticsearch-node-1.onrender.com");
 
 export async function apiRequest(path, options = {}) {
