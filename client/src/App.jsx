@@ -115,14 +115,23 @@ export default function App({ onProfileClick, onLogout }) {
     }
   };
 
-  const handleSend = () => {
-    if (!input.trim() || isLoading || !selectedConversationId) return;
-      // Generate a unique id for the outgoing user message to avoid collisions
-      // with the assistant placeholder and to keep React stable during updates.
-      const newMessage = { id: generateId(), sender: "user", text: input.trim() };
+  const sendText = (text) => {
+    if (!text.trim() || isLoading || !selectedConversationId) return false;
+
+    // Generate a unique id so each new message keeps a stable React key.
+    const newMessage = { id: generateId(), sender: "user", text: text.trim() };
     setMessages((prev) => [...prev, newMessage]);
-    handleApiCall(input.trim());
-    setInput("");
+    handleApiCall(text.trim());
+    return true;
+  };
+
+  const handleSend = () => {
+    if (sendText(input)) setInput("");
+  };
+
+  const handleVoiceSend = (spokenText) => {
+    // Voice text uses the same send function as typed text.
+    if (sendText(spokenText)) setInput("");
   };
 
   const handleConversationSelect = (conversation) => {
@@ -180,7 +189,7 @@ export default function App({ onProfileClick, onLogout }) {
         </div>
       </main>
 
-      <ChatInput input={input} setInput={setInput} onSend={handleSend} isLoading={isLoading} disabled={!selectedConversationId} />
+      <ChatInput input={input} setInput={setInput} onSend={handleSend} onVoiceSend={handleVoiceSend} isLoading={isLoading} disabled={!selectedConversationId} />
       </div>
     </div>
   );
